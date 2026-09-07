@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ni.edu.uam.pruebaprogramacion.Controller.ParticipanteController"
+      prefHeight="600.0" prefWidth="600.0">
+
+    <Label text="Ingrese los datos del participante" alignment="CENTER"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <TextField fx:id="txtNombre"
+                   maxWidth="125"
+                   maxHeight="25"
+                   promptText="Nombre"/>
+
+        <TextField fx:id="txtApellido"
+                   maxWidth="125"
+                   maxHeight="25"
+                   promptText="Apellido"/>
+
+        <TextField fx:id="txtEdad"
+                   maxWidth="125"
+                   maxHeight="25"
+                   promptText="Edad"/>
+
+        <TextField fx:id="txtTelefono"
+                   maxWidth="125"
+                   maxHeight="25"
+                   promptText="Telefono"/>
+    </HBox>
+
+
+    <Label text="Categoría"/>
+
+    <CheckBox fx:id="cbJuvenil"
+              text="Juvenil"
+              onAction="#seleccionarJuvenil"/>
+
+    <CheckBox fx:id="cbIntermedia"
+              text="Intermedia"
+              onAction="#seleccionarIntermedia"/>
+
+    <CheckBox fx:id="cbSenior"
+              text="Senior"
+              onAction="#seleccionarSenior"/>
+
+
+    <Label text="Modalidad"/>
+
+    <CheckBox fx:id="cbIndividual"
+              text="Individual"
+              onAction="#seleccionarIndividual"/>
+
+    <CheckBox fx:id="cbParejas"
+              text="Parejas"
+              onAction="#seleccionarParejas"/>
+
+    <CheckBox fx:id="cbEquipos"
+              text="Equipos"
+              onAction="#seleccionarEquipos"/>
+
+
+    <Label text="Características"/>
+
+    <CheckBox fx:id="cbFederado"
+              text="Federado"/>
+
+    <CheckBox fx:id="cbExperiencia"
+              text="Experiencia previa"/>
+
+    <CheckBox fx:id="cbDisponibilidad"
+              text="Disponibilidad fines de semana"/>
+
+    <CheckBox fx:id="cbSeguro"
+              text="Seguro deportivo"/>
+
+
+    <Label text="Disciplina"/>
+
+    <CheckBox fx:id="cbFutbol"
+              text="Fútbol"
+              onAction="#seleccionarFutbol"/>
+
+    <CheckBox fx:id="cbBaloncesto"
+              text="Baloncesto"
+              onAction="#seleccionarBaloncesto"/>
+
+    <CheckBox fx:id="cbVoleibol"
+              text="Voleibol"
+              onAction="#seleccionarVoleibol"/>
+
+    <CheckBox fx:id="cbAtletismo"
+              text="Atletismo"
+              onAction="#seleccionarAtletismo"/>
+
+    <CheckBox fx:id="cbNatacion"
+              text="Natación"
+              onAction="#seleccionarNatacion"/>
+
+    <CheckBox fx:id="cbTenis"
+              text="Tenis"
+              onAction="#seleccionarTenis"/>
+
+
+    <HBox spacing="10" alignment="CENTER">
+
+        <Button fx:id="btnAgregar"
+                text="Agregar"
+                onAction="#mostrarTabla"/>
+
+        <Button fx:id="btnEditar"
+                text="Editar"
+                onAction="#editarParticipante"/>
+
+        <Button fx:id="btnEliminar"
+                text="Eliminar"
+                onAction="#eliminarParticipante"/>
+
+    </HBox>
+
+
+    <TableView fx:id="tablaParticipante"
+               prefWidth="500"
+               prefHeight="250">
+        <columns>
+            <TableColumn fx:id="columnaNombre"
+                         text="Nombre"
+                         prefWidth="200"/>
+            <TableColumn fx:id="columnaApellido"
+                         text="Apellido"
+                         prefWidth="200"/>
+            <TableColumn fx:id="columnaEdad"
+                         text="Edad"
+                         prefWidth="200"/>
+            <TableColumn fx:id="columnaTelefono"
+                         text="Teléfono"
+                         prefWidth="200"/>
+            <TableColumn fx:id="columnaCategoria"
+                         text="Categoría"
+                         prefWidth="200"/>
+            <TableColumn fx:id="columnaDisciplina"
+                         text="Disciplina"
+                         prefWidth="200"/>
+            <TableColumn fx:id="columnaCaracteristicas"
+                         text="Características"
+                         prefWidth="200"/>
+            <TableColumn fx:id="columnaEstado"
+                         text="Estado"
+                         prefWidth="200"/>
+        </columns>
+    </TableView>
+</VBox>

@@ -7,6 +7,7 @@ public class Participante {
     private Integer edad;
     private String telefono;
     private String categoria;
+    private String genero;
     private String modalidad;
     private String disciplina;
     private String caracteristicas;
@@ -20,6 +21,7 @@ public class Participante {
                         Integer edad,
                         String telefono,
                         String categoria,
+                        String genero,
                         String modalidad,
                         String disciplina,
                         String caracteristicas,
@@ -30,6 +32,7 @@ public class Participante {
         this.edad = edad;
         this.telefono = telefono;
         this.categoria = categoria;
+        this.genero = genero;
         this.modalidad = modalidad;
         this.disciplina = disciplina;
         this.caracteristicas = caracteristicas;
@@ -74,6 +77,14 @@ public class Participante {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
     }
 
     public String getModalidad() {

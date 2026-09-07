@@ -8,106 +8,205 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="ni.edu.uam.pruebaprogramacion.Controller.ParticipanteController"
-      prefHeight="600.0" prefWidth="600.0">
+      prefHeight="750.0"
+      prefWidth="1100.0"
+      spacing="10">
 
-    <Label text="Ingrese los datos del participante" alignment="CENTER"/>
 
-    <HBox spacing="10" alignment="CENTER">
+    <MenuBar>
+
+        <Menu text="Archivo">
+
+            <MenuItem text="Nuevo"
+                      onAction="#limpiarFormulario"/>
+
+            <MenuItem text="Editar participante"
+                      onAction="#editarParticipante"/>
+
+            <MenuItem text="Eliminar seleccionado"
+                      onAction="#eliminarParticipante"/>
+
+            <SeparatorMenuItem/>
+
+            <MenuItem text="Salir"
+                      onAction="#salir"/>
+
+        </Menu>
+
+
+        <Menu text="Ayuda">
+
+            <MenuItem text="Acerca de"
+                      onAction="#mostrarAcercaDe"/>
+
+        </Menu>
+
+    </MenuBar>
+
+
+
+    <ToolBar>
+
+        <Button text="Agregar"
+                onAction="#mostrarTabla"/>
+
+        <Button text="Editar"
+                onAction="#editarParticipante"/>
+
+        <Button text="Eliminar"
+                onAction="#eliminarParticipante"/>
+
+        <Button text="Limpiar"
+                onAction="#limpiarFormulario"/>
+
+    </ToolBar>
+
+    <Label text="Sistema de Gestión de Torneo Deportivo"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <Label text="Ingrese los datos del participante"/>
+
+
+
+    <HBox spacing="10"
+          alignment="CENTER">
+
         <TextField fx:id="txtNombre"
-                   maxWidth="125"
+                   maxWidth="150"
                    maxHeight="25"
                    promptText="Nombre"/>
 
         <TextField fx:id="txtApellido"
-                   maxWidth="125"
+                   maxWidth="150"
                    maxHeight="25"
                    promptText="Apellido"/>
 
         <TextField fx:id="txtEdad"
-                   maxWidth="125"
+                   maxWidth="100"
                    maxHeight="25"
                    promptText="Edad"/>
 
         <TextField fx:id="txtTelefono"
-                   maxWidth="125"
+                   maxWidth="150"
                    maxHeight="25"
-                   promptText="Telefono"/>
+                   promptText="Teléfono"/>
+
     </HBox>
+
 
 
     <Label text="Categoría"/>
 
-    <CheckBox fx:id="cbJuvenil"
-              text="Juvenil"
-              onAction="#seleccionarJuvenil"/>
+    <HBox spacing="10">
 
-    <CheckBox fx:id="cbIntermedia"
-              text="Intermedia"
-              onAction="#seleccionarIntermedia"/>
+        <CheckBox fx:id="cbJuvenil"
+                  text="Juvenil"
+                  onAction="#seleccionarJuvenil"/>
 
-    <CheckBox fx:id="cbSenior"
-              text="Senior"
-              onAction="#seleccionarSenior"/>
+        <CheckBox fx:id="cbIntermedia"
+                  text="Intermedia"
+                  onAction="#seleccionarIntermedia"/>
+
+        <CheckBox fx:id="cbSenior"
+                  text="Senior"
+                  onAction="#seleccionarSenior"/>
+
+    </HBox>
+
+
+    <Label text="Género"/>
+
+    <HBox spacing="10">
+
+        <CheckBox fx:id="cbMasculino"
+                  text="Masculino"
+                  onAction="#seleccionarMasculino"/>
+
+        <CheckBox fx:id="cbFemenino"
+                  text="Femenino"
+                  onAction="#seleccionarFemenino"/>
+
+        <CheckBox fx:id="cbOtro"
+                  text="Otro"
+                  onAction="#seleccionarOtro"/>
+
+    </HBox>
+
 
 
     <Label text="Modalidad"/>
 
-    <CheckBox fx:id="cbIndividual"
-              text="Individual"
-              onAction="#seleccionarIndividual"/>
+    <HBox spacing="10">
 
-    <CheckBox fx:id="cbParejas"
-              text="Parejas"
-              onAction="#seleccionarParejas"/>
+        <CheckBox fx:id="cbIndividual"
+                  text="Individual"
+                  onAction="#seleccionarIndividual"/>
 
-    <CheckBox fx:id="cbEquipos"
-              text="Equipos"
-              onAction="#seleccionarEquipos"/>
+        <CheckBox fx:id="cbParejas"
+                  text="Parejas"
+                  onAction="#seleccionarParejas"/>
+
+        <CheckBox fx:id="cbEquipos"
+                  text="Equipos"
+                  onAction="#seleccionarEquipos"/>
+
+    </HBox>
+
 
 
     <Label text="Características"/>
 
-    <CheckBox fx:id="cbFederado"
-              text="Federado"/>
+    <HBox spacing="10">
 
-    <CheckBox fx:id="cbExperiencia"
-              text="Experiencia previa"/>
+        <CheckBox fx:id="cbFederado"
+                  text="Federado"/>
 
-    <CheckBox fx:id="cbDisponibilidad"
-              text="Disponibilidad fines de semana"/>
+        <CheckBox fx:id="cbExperiencia"
+                  text="Experiencia previa"/>
 
-    <CheckBox fx:id="cbSeguro"
-              text="Seguro deportivo"/>
+        <CheckBox fx:id="cbDisponibilidad"
+                  text="Disponibilidad fines de semana"/>
+
+        <CheckBox fx:id="cbSeguro"
+                  text="Seguro deportivo"/>
+
+    </HBox>
+
 
 
     <Label text="Disciplina"/>
 
-    <CheckBox fx:id="cbFutbol"
-              text="Fútbol"
-              onAction="#seleccionarFutbol"/>
+    <HBox spacing="10">
 
-    <CheckBox fx:id="cbBaloncesto"
-              text="Baloncesto"
-              onAction="#seleccionarBaloncesto"/>
+        <CheckBox fx:id="cbFutbol"
+                  text="Fútbol"
+                  onAction="#seleccionarFutbol"/>
 
-    <CheckBox fx:id="cbVoleibol"
-              text="Voleibol"
-              onAction="#seleccionarVoleibol"/>
+        <CheckBox fx:id="cbBaloncesto"
+                  text="Baloncesto"
+                  onAction="#seleccionarBaloncesto"/>
 
-    <CheckBox fx:id="cbAtletismo"
-              text="Atletismo"
-              onAction="#seleccionarAtletismo"/>
+        <CheckBox fx:id="cbVoleibol"
+                  text="Voleibol"
+                  onAction="#seleccionarVoleibol"/>
 
-    <CheckBox fx:id="cbNatacion"
-              text="Natación"
-              onAction="#seleccionarNatacion"/>
+        <CheckBox fx:id="cbAtletismo"
+                  text="Atletismo"
+                  onAction="#seleccionarAtletismo"/>
 
-    <CheckBox fx:id="cbTenis"
-              text="Tenis"
-              onAction="#seleccionarTenis"/>
+        <CheckBox fx:id="cbNatacion"
+                  text="Natación"
+                  onAction="#seleccionarNatacion"/>
+
+        <CheckBox fx:id="cbTenis"
+                  text="Tenis"
+                  onAction="#seleccionarTenis"/>
+
+    </HBox>
 
 
-    <HBox spacing="10" alignment="CENTER">
+    <HBox spacing="10"
+          alignment="CENTER">
 
         <Button fx:id="btnAgregar"
                 text="Agregar"
@@ -121,37 +220,59 @@
                 text="Eliminar"
                 onAction="#eliminarParticipante"/>
 
+        <Button text="Limpiar"
+                onAction="#limpiarFormulario"/>
+
     </HBox>
 
-
     <TableView fx:id="tablaParticipante"
-               prefWidth="500"
-               prefHeight="250">
+               prefWidth="1050"
+               prefHeight="300">
+
         <columns>
+
             <TableColumn fx:id="columnaNombre"
                          text="Nombre"
-                         prefWidth="200"/>
+                         prefWidth="120"/>
+
             <TableColumn fx:id="columnaApellido"
                          text="Apellido"
-                         prefWidth="200"/>
+                         prefWidth="120"/>
+
             <TableColumn fx:id="columnaEdad"
                          text="Edad"
-                         prefWidth="200"/>
+                         prefWidth="60"/>
+
             <TableColumn fx:id="columnaTelefono"
                          text="Teléfono"
-                         prefWidth="200"/>
+                         prefWidth="100"/>
+
             <TableColumn fx:id="columnaCategoria"
                          text="Categoría"
-                         prefWidth="200"/>
+                         prefWidth="100"/>
+
+            <TableColumn fx:id="columnaGenero"
+                         text="Género"
+                         prefWidth="90"/>
+
+            <TableColumn fx:id="columnaModalidad"
+                         text="Modalidad"
+                         prefWidth="100"/>
+
             <TableColumn fx:id="columnaDisciplina"
                          text="Disciplina"
-                         prefWidth="200"/>
+                         prefWidth="100"/>
+
             <TableColumn fx:id="columnaCaracteristicas"
                          text="Características"
-                         prefWidth="200"/>
+                         prefWidth="250"/>
+
             <TableColumn fx:id="columnaEstado"
                          text="Estado"
-                         prefWidth="200"/>
+                         prefWidth="100"/>
+
         </columns>
+
     </TableView>
+
 </VBox>

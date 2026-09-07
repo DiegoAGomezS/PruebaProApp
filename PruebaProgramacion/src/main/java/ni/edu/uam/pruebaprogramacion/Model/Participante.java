@@ -15,16 +15,15 @@ public class Participante {
     public Participante() {
     }
 
-    public Participante(
-            String nombre,
-            String apellido,
-            Integer edad,
-            String telefono,
-            String categoria,
-            String modalidad,
-            String disciplina,
-            String caracteristicas,
-            String estado) {
+    public Participante(String nombre,
+                        String apellido,
+                        Integer edad,
+                        String telefono,
+                        String categoria,
+                        String modalidad,
+                        String disciplina,
+                        String caracteristicas,
+                        String estado) {
 
         this.nombre = nombre;
         this.apellido = apellido;

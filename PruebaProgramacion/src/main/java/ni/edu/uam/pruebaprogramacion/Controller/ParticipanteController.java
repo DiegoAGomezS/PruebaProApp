@@ -1,5 +1,7 @@
 package ni.edu.uam.pruebaprogramacion.Controller;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,7 +10,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import ni.edu.uam.pruebaprogramacion.Model.Participante;
 import ni.edu.uam.pruebaprogramacion.Validator.ParticipanteValidator;
 
@@ -16,7 +17,7 @@ import java.util.Arrays;
 
 public class ParticipanteController {
 
-    //Participante
+    // Campos de texto
     @FXML
     private TextField txtNombre;
     @FXML
@@ -26,13 +27,15 @@ public class ParticipanteController {
     @FXML
     private TextField txtTelefono;
 
-    //Categoría
+
+    // Categoría
     @FXML
     private CheckBox cbJuvenil;
     @FXML
     private CheckBox cbIntermedia;
     @FXML
     private CheckBox cbSenior;
+
 
     // Modalidad
     @FXML
@@ -66,6 +69,7 @@ public class ParticipanteController {
     @FXML
     private CheckBox cbTenis;
 
+
     // Tabla
     @FXML
     private TableView<Participante> tablaParticipante;
@@ -86,102 +90,247 @@ public class ParticipanteController {
     @FXML
     private TableColumn<Participante, String> columnaEstado;
 
-
     // Lista de participantes
     private ObservableList<Participante> participantes =
             FXCollections.observableArrayList();
 
 
-    // Inicialización de la tabla
     @FXML
-    private void initialize() {
+    public void initialize() {
+        configurarTabla();
+        tablaParticipante.setItems(participantes);
+    }
+    // Configurar tabla
+
+    private void configurarTabla() {
         columnaNombre.setCellValueFactory(
-                new PropertyValueFactory<>("nombre")
+                dato -> new SimpleStringProperty(
+                        dato.getValue().getNombre()
+                )
         );
         columnaApellido.setCellValueFactory(
-                new PropertyValueFactory<>("apellido")
+                dato -> new SimpleStringProperty(
+                        dato.getValue().getApellido()
+                )
         );
         columnaEdad.setCellValueFactory(
-                new PropertyValueFactory<>("edad")
+                dato -> new SimpleObjectProperty<>(
+                        dato.getValue().getEdad()
+                )
         );
         columnaTelefono.setCellValueFactory(
-                new PropertyValueFactory<>("telefono")
+                dato -> new SimpleStringProperty(
+                        dato.getValue().getTelefono()
+                )
         );
         columnaCategoria.setCellValueFactory(
-                new PropertyValueFactory<>("categoria")
+                dato -> new SimpleStringProperty(
+                        dato.getValue().getCategoria()
+                )
         );
         columnaDisciplina.setCellValueFactory(
-                new PropertyValueFactory<>("disciplina")
+                dato -> new SimpleStringProperty(
+                        dato.getValue().getDisciplina()
+                )
         );
         columnaCaracteristicas.setCellValueFactory(
-                new PropertyValueFactory<>("caracteristicas")
+                dato -> new SimpleStringProperty(
+                        dato.getValue().getCaracteristicas()
+                )
         );
         columnaEstado.setCellValueFactory(
-                new PropertyValueFactory<>("estado")
+                dato -> new SimpleStringProperty(
+                        dato.getValue().getEstado()
+                )
         );
-        tablaParticipante.setItems(participantes);
     }
 
 
-    // Método para agregar participante
+    // Mostrar tabla / agregar participante
     @FXML
     private void mostrarTabla() {
-
-        String nombre = txtNombre.getText();
-        String apellido = txtApellido.getText();
-        String edadTexto = txtEdad.getText();
-        String telefono = txtTelefono.getText();
-
-        String categoria = obtenerCategoria();
-        String modalidad = obtenerModalidad();
-        String disciplina = obtenerDisciplina();
-        String caracteristicas = obtenerCaracteristicas();
-
-        Integer edad;
-
-        try {
-
-            edad = Integer.parseInt(edadTexto);
-
-        } catch (NumberFormatException e) {
-
-            mostrarAlerta(
-                    "Error",
-                    "La edad debe ser un número."
-            );
-
-            return;
+        Integer edad = null;
+        if (!txtEdad.getText().trim().isEmpty()) {
+            try {
+                edad = Integer.parseInt(
+                        txtEdad.getText().trim()
+                );
+            } catch (NumberFormatException e) {
+                mostrarAlerta(
+                        Alert.AlertType.ERROR,
+                        "Error",
+                        "La edad debe ser un número entero."
+                );
+                return;
+            }
         }
         Participante participante = new Participante(
-                nombre,
-                apellido,
+                txtNombre.getText(),
+                txtApellido.getText(),
                 edad,
-                telefono,
-                categoria,
-                modalidad,
-                disciplina,
-                caracteristicas,
-                "Inscrito"
+                txtTelefono.getText(),
+                obtenerCategoria(),
+                obtenerModalidad(),
+                obtenerDisciplina(),
+                obtenerCaracteristicas(),
+                "Registrado"
         );
-        String error = ParticipanteValidator.validar(participante);
+        // Validar participante
+        String error =
+                ParticipanteValidator.validar(participante);
         if (error != null) {
             mostrarAlerta(
+                    Alert.AlertType.ERROR,
                     "Error de validación",
                     error
             );
             return;
         }
-
+        // Agregar participante
         participantes.add(participante);
         limpiarFormulario();
+        mostrarAlerta(
+                Alert.AlertType.INFORMATION,
+                "Registro exitoso",
+                "El participante fue agregado correctamente."
+        );
     }
 
 
-    //Metodos de categoría
+    // Eliminar participante
+    @FXML
+    private void eliminarParticipante() {
+        Participante participante =
+                tablaParticipante
+                        .getSelectionModel()
+                        .getSelectedItem();
+
+
+        if (participante == null) {
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "Eliminar participante",
+                    "Debe seleccionar un participante de la tabla."
+            );
+            return;
+        }
+        Alert confirmacion =
+                new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Eliminar participante");
+        confirmacion.setHeaderText(null);
+        confirmacion.setContentText(
+                "¿Está seguro de eliminar al participante "
+                        + participante.getNombre()
+                        + " "
+                        + participante.getApellido()
+                        + "?"
+        );
+
+
+        confirmacion.showAndWait().ifPresent(
+                respuesta -> {
+                    if (respuesta.getButtonData().isDefaultButton()) {
+                        participantes.remove(participante);
+                        mostrarAlerta(
+                                Alert.AlertType.INFORMATION,
+                                "Participante eliminado",
+                                "El participante fue eliminado correctamente."
+                        );
+                    }
+                }
+        );
+    }
+
+
+    // Obtener categoría
+
+    private String obtenerCategoria() {
+        if (cbJuvenil.isSelected()) {
+            return "Juvenil";
+        }
+        if (cbIntermedia.isSelected()) {
+            return "Intermedia";
+        }
+        if (cbSenior.isSelected()) {
+            return "Senior";
+        }
+        return "";
+    }
+
+
+    // Obtener modalidad
+
+    private String obtenerModalidad() {
+        if (cbIndividual.isSelected()) {
+            return "Individual";
+        }
+        if (cbParejas.isSelected()) {
+            return "Parejas";
+        }
+        if (cbEquipos.isSelected()) {
+            return "Equipos";
+        }
+        return "";
+    }
+
+
+    // Obtener disciplina
+    private String obtenerDisciplina() {
+        if (cbFutbol.isSelected()) {
+            return "Fútbol";
+        }
+        if (cbBaloncesto.isSelected()) {
+            return "Baloncesto";
+        }
+        if (cbVoleibol.isSelected()) {
+            return "Voleibol";
+        }
+        if (cbAtletismo.isSelected()) {
+            return "Atletismo";
+        }
+        if (cbNatacion.isSelected()) {
+            return "Natación";
+        }
+        if (cbTenis.isSelected()) {
+            return "Tenis";
+        }
+        return "";
+    }
+
+
+    // Obtener características
+
+    private String obtenerCaracteristicas() {
+        StringBuilder caracteristicas =
+                new StringBuilder();
+        if (cbFederado.isSelected()) {
+            caracteristicas.append("Federado, ");
+        }
+        if (cbExperiencia.isSelected()) {
+            caracteristicas.append("Experiencia previa, ");
+        }
+        if (cbDisponibilidad.isSelected()) {
+            caracteristicas.append(
+                    "Disponibilidad fines de semana, "
+            );
+        }
+        if (cbSeguro.isSelected()) {
+            caracteristicas.append("Seguro deportivo, ");
+        }
+        if (caracteristicas.length() == 0) {
+            return "Ninguna";
+        }
+        return caracteristicas.substring(
+                0,
+                caracteristicas.length() - 2
+        );
+    }
+
+
+    // Seleccionar categoría
 
     @FXML
     private void seleccionarJuvenil() {
-
         ejecutarSeleccion(
                 cbJuvenil,
                 cbIntermedia,
@@ -191,7 +340,6 @@ public class ParticipanteController {
 
     @FXML
     private void seleccionarIntermedia() {
-
         ejecutarSeleccion(
                 cbIntermedia,
                 cbJuvenil,
@@ -201,7 +349,6 @@ public class ParticipanteController {
 
     @FXML
     private void seleccionarSenior() {
-
         ejecutarSeleccion(
                 cbSenior,
                 cbJuvenil,
@@ -210,11 +357,10 @@ public class ParticipanteController {
     }
 
 
-    //Metodos modalidad
+    // Seleccionar modalidad
 
     @FXML
     private void seleccionarIndividual() {
-
         ejecutarSeleccion(
                 cbIndividual,
                 cbParejas,
@@ -224,7 +370,6 @@ public class ParticipanteController {
 
     @FXML
     private void seleccionarParejas() {
-
         ejecutarSeleccion(
                 cbParejas,
                 cbIndividual,
@@ -234,7 +379,6 @@ public class ParticipanteController {
 
     @FXML
     private void seleccionarEquipos() {
-
         ejecutarSeleccion(
                 cbEquipos,
                 cbIndividual,
@@ -243,11 +387,9 @@ public class ParticipanteController {
     }
 
 
-    //Metodos de Disciplina
-
+    // Seleccionar disciplina
     @FXML
     private void seleccionarFutbol() {
-
         ejecutarSeleccion(
                 cbFutbol,
                 cbBaloncesto,
@@ -260,7 +402,6 @@ public class ParticipanteController {
 
     @FXML
     private void seleccionarBaloncesto() {
-
         ejecutarSeleccion(
                 cbBaloncesto,
                 cbFutbol,
@@ -273,7 +414,6 @@ public class ParticipanteController {
 
     @FXML
     private void seleccionarVoleibol() {
-
         ejecutarSeleccion(
                 cbVoleibol,
                 cbFutbol,
@@ -286,7 +426,6 @@ public class ParticipanteController {
 
     @FXML
     private void seleccionarAtletismo() {
-
         ejecutarSeleccion(
                 cbAtletismo,
                 cbFutbol,
@@ -311,7 +450,6 @@ public class ParticipanteController {
 
     @FXML
     private void seleccionarTenis() {
-
         ejecutarSeleccion(
                 cbTenis,
                 cbFutbol,
@@ -322,140 +460,22 @@ public class ParticipanteController {
         );
     }
 
-
-    //Metodo de ejecutarSeleccion
-    //Permite que solo uno sea seleccionado
+    // Método para selección única
 
     private void ejecutarSeleccion(
             CheckBox seleccionado,
             CheckBox... opciones) {
-
         if (seleccionado.isSelected()) {
-
             Arrays.stream(opciones)
-                    .forEach(opcion -> opcion.setSelected(false));
+                    .forEach(
+                            opcion ->
+                                    opcion.setSelected(false)
+                    );
         }
     }
 
-
-    //Metodos de obtención de datos
-
-    private String obtenerCategoria() {
-
-        if (cbJuvenil.isSelected()) {
-            return "Juvenil";
-        }
-
-        if (cbIntermedia.isSelected()) {
-            return "Intermedia";
-        }
-
-        if (cbSenior.isSelected()) {
-            return "Senior";
-        }
-
-        return null;
-    }
-
-
-    private String obtenerModalidad() {
-
-        if (cbIndividual.isSelected()) {
-            return "Individual";
-        }
-
-        if (cbParejas.isSelected()) {
-            return "Parejas";
-        }
-
-        if (cbEquipos.isSelected()) {
-            return "Equipos";
-        }
-
-        return null;
-    }
-
-
-    private String obtenerDisciplina() {
-
-        if (cbFutbol.isSelected()) {
-            return "Fútbol";
-        }
-
-        if (cbBaloncesto.isSelected()) {
-            return "Baloncesto";
-        }
-
-        if (cbVoleibol.isSelected()) {
-            return "Voleibol";
-        }
-
-        if (cbAtletismo.isSelected()) {
-            return "Atletismo";
-        }
-
-        if (cbNatacion.isSelected()) {
-            return "Natación";
-        }
-
-        if (cbTenis.isSelected()) {
-            return "Tenis";
-        }
-
-        return null;
-    }
-
-
-    private String obtenerCaracteristicas() {
-        StringBuilder caracteristicas = new StringBuilder();
-        if (cbFederado.isSelected()) {
-            caracteristicas.append("Federado");
-        }
-
-        if (cbExperiencia.isSelected()) {
-            if (caracteristicas.length() > 0) {
-                caracteristicas.append(", ");
-            }
-            caracteristicas.append("Experiencia previa");
-        }
-
-        if (cbDisponibilidad.isSelected()) {
-            if (caracteristicas.length() > 0) {
-                caracteristicas.append(", ");
-            }
-            caracteristicas.append("Disponibilidad fines de semana");
-        }
-
-        if (cbSeguro.isSelected()) {
-            if (caracteristicas.length() > 0) {
-                caracteristicas.append(", ");
-            }
-            caracteristicas.append("Seguro deportivo");
-        }
-        return caracteristicas.toString();
-    }
-
-
-    // Método para mostrar alertas
-
-    private void mostrarAlerta(
-            String titulo,
-            String mensaje) {
-
-        Alert alerta = new Alert(Alert.AlertType.ERROR);
-
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-
-        alerta.showAndWait();
-    }
-
-
-    // Método para limpiar el formulario
-
+    // Limpiar formulario
     private void limpiarFormulario() {
-
         txtNombre.clear();
         txtApellido.clear();
         txtEdad.clear();
@@ -464,6 +484,7 @@ public class ParticipanteController {
         cbJuvenil.setSelected(false);
         cbIntermedia.setSelected(false);
         cbSenior.setSelected(false);
+
         cbIndividual.setSelected(false);
         cbParejas.setSelected(false);
         cbEquipos.setSelected(false);
@@ -479,5 +500,17 @@ public class ParticipanteController {
         cbAtletismo.setSelected(false);
         cbNatacion.setSelected(false);
         cbTenis.setSelected(false);
+    }
+
+    // Mostrar alerta
+    private void mostrarAlerta(
+            Alert.AlertType tipo,
+            String titulo,
+            String mensaje) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }

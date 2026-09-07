@@ -113,6 +113,10 @@
                 text="Agregar"
                 onAction="#mostrarTabla"/>
 
+        <Button fx:id="btnEditar"
+                text="Editar"
+                onAction="#editarParticipante"/>
+
         <Button fx:id="btnEliminar"
                 text="Eliminar"
                 onAction="#eliminarParticipante"/>

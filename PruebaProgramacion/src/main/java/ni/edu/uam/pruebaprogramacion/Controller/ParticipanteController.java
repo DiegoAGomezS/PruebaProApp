@@ -5,11 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import ni.edu.uam.pruebaprogramacion.Model.Participante;
 import ni.edu.uam.pruebaprogramacion.Validator.ParticipanteValidator;
 
@@ -90,10 +86,18 @@ public class ParticipanteController {
     @FXML
     private TableColumn<Participante, String> columnaEstado;
 
+
+    // Editar
+    @FXML
+    private Button btnAgregar;
+
+    @FXML
+    private Button btnEditar;
+
     // Lista de participantes
     private ObservableList<Participante> participantes =
             FXCollections.observableArrayList();
-
+    private Participante participanteEditando = null;
 
     @FXML
     public void initialize() {
@@ -149,7 +153,9 @@ public class ParticipanteController {
     // Mostrar tabla / agregar participante
     @FXML
     private void mostrarTabla() {
+
         Integer edad = null;
+
         if (!txtEdad.getText().trim().isEmpty()) {
             try {
                 edad = Integer.parseInt(
@@ -164,6 +170,7 @@ public class ParticipanteController {
                 return;
             }
         }
+
         Participante participante = new Participante(
                 txtNombre.getText(),
                 txtApellido.getText(),
@@ -175,9 +182,11 @@ public class ParticipanteController {
                 obtenerCaracteristicas(),
                 "Registrado"
         );
+
         // Validar participante
         String error =
                 ParticipanteValidator.validar(participante);
+
         if (error != null) {
             mostrarAlerta(
                     Alert.AlertType.ERROR,
@@ -186,9 +195,68 @@ public class ParticipanteController {
             );
             return;
         }
-        // Agregar participante
+
+        // Si estamos editando
+        if (participanteEditando != null) {
+
+            participanteEditando.setNombre(
+                    participante.getNombre()
+            );
+
+            participanteEditando.setApellido(
+                    participante.getApellido()
+            );
+
+            participanteEditando.setEdad(
+                    participante.getEdad()
+            );
+
+            participanteEditando.setTelefono(
+                    participante.getTelefono()
+            );
+
+            participanteEditando.setCategoria(
+                    participante.getCategoria()
+            );
+
+            participanteEditando.setModalidad(
+                    participante.getModalidad()
+            );
+
+            participanteEditando.setDisciplina(
+                    participante.getDisciplina()
+            );
+
+            participanteEditando.setCaracteristicas(
+                    participante.getCaracteristicas()
+            );
+
+            participanteEditando.setEstado(
+                    participante.getEstado()
+            );
+
+            tablaParticipante.refresh();
+
+            participanteEditando = null;
+
+            btnAgregar.setText("Agregar");
+
+            limpiarFormulario();
+
+            mostrarAlerta(
+                    Alert.AlertType.INFORMATION,
+                    "Edición exitosa",
+                    "El participante fue actualizado correctamente."
+            );
+
+            return;
+        }
+
+        // Agregar participante nuevo
         participantes.add(participante);
+
         limpiarFormulario();
+
         mostrarAlerta(
                 Alert.AlertType.INFORMATION,
                 "Registro exitoso",
@@ -500,6 +568,124 @@ public class ParticipanteController {
         cbAtletismo.setSelected(false);
         cbNatacion.setSelected(false);
         cbTenis.setSelected(false);
+    }
+
+    @FXML
+    private void editarParticipante() {
+
+        Participante participante =
+                tablaParticipante
+                        .getSelectionModel()
+                        .getSelectedItem();
+
+        if (participante == null) {
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "Editar participante",
+                    "Debe seleccionar un participante de la tabla."
+            );
+            return;
+        }
+
+        // Guardamos el participante que estamos editando
+        participanteEditando = participante;
+
+        // Cargar datos de texto
+        txtNombre.setText(
+                participante.getNombre()
+        );
+
+        txtApellido.setText(
+                participante.getApellido()
+        );
+
+        if (participante.getEdad() != null) {
+            txtEdad.setText(
+                    participante.getEdad().toString()
+            );
+        } else {
+            txtEdad.clear();
+        }
+
+        txtTelefono.setText(
+                participante.getTelefono()
+        );
+
+        // Cargar categoría
+        cbJuvenil.setSelected(
+                participante.getCategoria().equals("Juvenil")
+        );
+
+        cbIntermedia.setSelected(
+                participante.getCategoria().equals("Intermedia")
+        );
+
+        cbSenior.setSelected(
+                participante.getCategoria().equals("Senior")
+        );
+
+        // Cargar modalidad
+        cbIndividual.setSelected(
+                participante.getModalidad().equals("Individual")
+        );
+
+        cbParejas.setSelected(
+                participante.getModalidad().equals("Parejas")
+        );
+
+        cbEquipos.setSelected(
+                participante.getModalidad().equals("Equipos")
+        );
+
+        // Cargar disciplina
+        cbFutbol.setSelected(
+                participante.getDisciplina().equals("Fútbol")
+        );
+
+        cbBaloncesto.setSelected(
+                participante.getDisciplina().equals("Baloncesto")
+        );
+
+        cbVoleibol.setSelected(
+                participante.getDisciplina().equals("Voleibol")
+        );
+
+        cbAtletismo.setSelected(
+                participante.getDisciplina().equals("Atletismo")
+        );
+
+        cbNatacion.setSelected(
+                participante.getDisciplina().equals("Natación")
+        );
+
+        cbTenis.setSelected(
+                participante.getDisciplina().equals("Tenis")
+        );
+
+        // Cargar características
+        String caracteristicas =
+                participante.getCaracteristicas();
+
+        cbFederado.setSelected(
+                caracteristicas.contains("Federado")
+        );
+
+        cbExperiencia.setSelected(
+                caracteristicas.contains("Experiencia previa")
+        );
+
+        cbDisponibilidad.setSelected(
+                caracteristicas.contains(
+                        "Disponibilidad fines de semana"
+                )
+        );
+
+        cbSeguro.setSelected(
+                caracteristicas.contains("Seguro deportivo")
+        );
+
+        // Cambiar texto del botón
+        btnAgregar.setText("Guardar cambios");
     }
 
     // Mostrar alerta
